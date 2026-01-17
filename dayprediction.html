@@ -1,0 +1,190 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Tomorrow Predictor 3000</title>
+<style>
+    body {
+        background: #0f172a;
+        color: white;
+        font-family: Arial, sans-serif;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        height: 100vh;
+    }
+    .box {
+        background: #020617;
+        padding: 30px;
+        border-radius: 12px;
+        width: 400px;
+        text-align: center;
+        box-shadow: 0 0 25px rgba(0,0,0,0.6);
+    }
+    input {
+        width: 90%;
+        padding: 10px;
+        margin: 15px 0;
+        border-radius: 6px;
+        border: none;
+        background-color: #1e293b;
+        
+    }
+    button {
+        padding: 10px 25px;
+        border: none;
+        border-radius: 6px;
+        background: #22c55e;
+        color: black;
+        font-weight: bold;
+        cursor: pointer;
+    }
+    .status-wrapper {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+    .progress-container {
+        width: 100%;
+        background: #1e293b;
+        border-radius: 6px;
+        overflow: hidden;
+        margin-top: 15px;
+        display: none;
+    }
+    .progress-bar {
+        height: 15px;
+        width: 0%;
+        background: #38bdf8;
+        transition: width 0.3s;
+    }
+    .status {
+        margin-top: 15px;
+        min-height: 24px;
+        font-size: 14px;
+        color: #a5f3fc;
+    }
+    .result {
+        margin-top: 20px;
+        font-size: 20px;
+        font-weight: bold;
+        color: #22c55e;
+    }
+</style>
+</head>
+<body>
+
+<div class="box">
+    <h2>🧠 Tomorrow Day Predictor</h2>
+    <input type="text" placeholder="Tomorrow is which day?" >
+    <br>
+    <button onclick="startPrediction()">Submit</button>
+
+   <div class="status-wrapper">
+    <div class="status" id="status"></div>
+    <img
+        id="loaderGif"
+        src="https://media.tenor.com/On7kvXhzml4AAAAi/loading-gif.gif"
+        style="width:40px; margin-top:6px;"
+    >
+</div>
+
+
+    <div class="progress-container" id="progressBox">
+        <div class="progress-bar" id="progressBar"></div>
+    </div>
+
+    <div class="result" id="result"></div>
+</div>
+
+<script>
+const messages = [
+    "🔍 Analyzing answer...",
+    "📐 Using Pythagoras theorem to check answer...",
+    "🪐 Analyzing Saturn for tomorrow...",
+    "🚀 Taking info from NASA & ISRO...",
+    "🤖 Asking Elon Musk for review...",
+    "💼 Asking Trump to stop tariff on India...",
+    "✅ Finalizing result..."
+];
+
+let msgIndex = 0;
+let charIndex = 0;
+
+function startPrediction() {
+    msgIndex = 0;
+    charIndex = 0;
+
+    document.getElementById("status").innerHTML = "";
+    document.getElementById("result").innerHTML = "";
+
+    // ✅ SHOW GIF when analysis starts
+    document.getElementById("loaderGif").style.display = "inline-block";
+
+    startProgressBar();
+    typeText();
+}
+
+function typeText() {
+    const status = document.getElementById("status");
+    const currentMsg = messages[msgIndex];
+
+    status.innerHTML = "";
+
+    const typing = setInterval(() => {
+        status.innerHTML += currentMsg.charAt(charIndex);
+        charIndex++;
+
+        if (charIndex >= currentMsg.length) {
+            clearInterval(typing);
+            charIndex = 0;
+            msgIndex++;
+
+            setTimeout(() => {
+                if (msgIndex < messages.length) {
+                    typeText();
+                }
+            }, 1200);
+        }
+    }, 80);
+}
+
+function startProgressBar() {
+    const box = document.getElementById("progressBox");
+    const bar = document.getElementById("progressBar");
+
+    box.style.display = "block";
+    bar.style.width = "0%";
+
+    let progress = 0;
+
+    const interval = setInterval(() => {
+        progress += 1;
+        bar.style.width = progress + "%";
+
+        if (progress >= 100) {
+            clearInterval(interval);
+            showResult();
+        }
+    }, 120);
+}
+
+function showResult() {
+    // ❌ HIDE GIF when analysis completes
+    document.getElementById("loaderGif").style.display = "none";
+
+    const tomorrow = new Date();
+    tomorrow.setDate(tomorrow.getDate() + 1);
+
+    const days = ["Sunday","Monday","Tuesday","Wednesday","Thursday","Friday","Saturday"];
+    const dayName = days[tomorrow.getDay()];
+
+    document.getElementById("status").innerHTML = "🎉 Analysis Complete!";
+    document.getElementById("result").innerHTML =
+        "📅 Tomorrow is: <span style='color:#38bdf8'>" + dayName + "</span>";
+}
+</script>
+
+</body>
+</html>
